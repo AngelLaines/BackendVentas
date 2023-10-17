@@ -6,8 +6,8 @@ const getAll = async () => {
 }
 
 const getById = async (id) => {
-    
-    return ;
+    console.log(Games.getGameById(+id));
+    return Games.getGameById(+id);
 }
 
 const create = async(product)=>{
