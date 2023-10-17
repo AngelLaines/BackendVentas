@@ -16,19 +16,19 @@ const create = async(product)=>{
 }
 
 // update
-const updateSale = async (id,body)=>{
+const updateCatalog = async (id,body)=>{
     
     return ;
 }
 // delete 
-const deleteSale = async (id)=>{
+const deleteCatalog = async (id)=>{
     
     return ;
 }
-module.exports.SalesService = {
+module.exports.CatalogsService = {
     getAll,
     getById,
     create,
-    updateSale,
-    deleteSale,
+    updateCatalog,
+    deleteCatalog,
 }

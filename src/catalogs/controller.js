@@ -1,9 +1,9 @@
 const debug = require("debug")("app:module-sales-controller")
-const { SalesService:  SalesService } = require('./services');
+const { CatalogsService:  SalesService } = require('./services');
 const {Response}  =require('../common/response');
 const createError = require("http-errors");
-module.exports.SalesController = {
-    getSales: async (req, res) => {
+module.exports.CatalogsController = {
+    getCatalogs: async (req, res) => {
         try {
             const games = await SalesService.getAll();
             //console.log(games);
@@ -13,7 +13,7 @@ module.exports.SalesController = {
             Response.error(res);
         }
     },
-    getSale: async (req, res) => {
+    getCatalog: async (req, res) => {
         try {
             
         } catch (error) {
@@ -21,7 +21,7 @@ module.exports.SalesController = {
             Response.error(res);
         }
     },
-    createSale: async (req, res) => {
+    createCatalog: async (req, res) => {
         try {
             const { body } = req;
             
@@ -32,7 +32,7 @@ module.exports.SalesController = {
     },
     
     // update 
-    updateSale:async(req,res)=>{
+    updateCatalog:async(req,res)=>{
         try {
             const {params:{id}}=req;
             const {body} =req;
@@ -48,7 +48,7 @@ module.exports.SalesController = {
         }
     },
     // delete
-    deleteSale:async(req,res)=>{
+    deleteCatalog:async(req,res)=>{
         try {
             const {params:{id}} = req;
             if (await UsersService.getById(id)) {

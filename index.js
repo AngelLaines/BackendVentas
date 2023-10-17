@@ -1,7 +1,7 @@
 const express = require("express");
 const deb = require("debug")("app:main");
 const { Config } = require("./src/config/index");
-const {SalesAPI} =require('./src/sales/index');
+const {SalesAPI} =require('./src/catalogs/index');
 const app = express();
 
 app.use(express.json());
