@@ -1,10 +1,15 @@
-const { SalesController } = require('./controller');
 const express = require('express');
-const router= express.Router();
-module.exports.SalesAPI = (app)=>{
+const {SalesController: SalesController} = require('./controller');
+const router = express.Router();
+
+module.exports.SalesAPI = (app) => {
     router
-        .get("/",SalesController.getAll)
-        .get("/:id",SalesController.getById)
-        .post("/:id",SalesController.createSale);
-        app.use("/api/sales",router);
+    .get("/", SalesController.getSales)
+    .get("/:id", SalesController.getSale)
+    .post("/", SalesController.createSale)
+    // update
+    .put("/:id",SalesController.updateSale)
+    // delete 
+    .delete("/:id",SalesController.deleteSale);
+    app.use("/api/sales",router)
 }

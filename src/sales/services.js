@@ -1,27 +1,34 @@
-const {ObjectId, Collection} = require('mongodb');
-const { Database } = require('../database/index');
-
-const COLLECTION = "sales";
+const { Games }= require("../common/games");
 
 const getAll = async () => {
-    const collection = await Database(COLLECTION);
-    return await collection.find({}).toArray();
+    console.log(Games.getGames());
+    return Games.getGames();
 }
 
-const getByName = async (user) => {
-    const collection = await Database(COLLECTION);
-    return await collection.find({ user: user }).toArray();
+const getById = async (id) => {
+    
+    return ;
 }
 
-const createSale = async(body)=>{
-    const collection = await Database(COLLECTION);
-    let result = await collection.insertOne(body);
-    return result.insertedId;
+const create = async(product)=>{
+    
+    return ;
 }
 
-
+// update
+const updateSale = async (id,body)=>{
+    
+    return ;
+}
+// delete 
+const deleteSale = async (id)=>{
+    
+    return ;
+}
 module.exports.SalesService = {
     getAll,
-    getByName,
-    createSale,
+    getById,
+    create,
+    updateSale,
+    deleteSale,
 }
