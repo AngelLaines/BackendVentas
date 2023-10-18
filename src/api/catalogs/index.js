@@ -2,7 +2,7 @@ const express = require('express');
 const {CatalogsController: CatalogsController} = require('./controller');
 const router = express.Router();
 
-module.exports.SalesAPI = (app) => {
+module.exports.CatalogsAPI = (app) => {
     router
     .get("/", CatalogsController.getCatalogs)
     .get("/:id", CatalogsController.getCatalog)

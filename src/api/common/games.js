@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 
-const filePath = "games.json";
+const filePath = "../../db/games.json";
 let gamesArray = [];
 let games = {};
 

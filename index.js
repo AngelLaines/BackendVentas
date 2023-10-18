@@ -1,7 +1,8 @@
 const express = require("express");
 const deb = require("debug")("app:main");
 const { Config } = require("./src/config/index");
-const {SalesAPI} =require('./src/catalogs/index');
+const {CatalogsAPI} =require('./src/api/catalogs/index');
+const { SalesAPI } = require("./src/api/sales/index");
 const app = express();
 
 app.use(express.json());
@@ -12,7 +13,8 @@ app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Headers","Content-Type, Autorization");
     next()
 });
-SalesAPI(app);
+CatalogsAPI(app);
+SalesAPI(app)
 // modulos
 
 app.listen(Config.port, () => {
