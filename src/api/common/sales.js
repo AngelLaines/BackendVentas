@@ -16,7 +16,7 @@ const getSales = async (file) => {
         Bucket:bucket,
         Key: saleFile(file)
     }).promise();
-    //console.log(salesArray);
+    console.log(salesArray);
     return JSON.parse(salesArray);
 }
 const getSaleById = (id,file)=>{
