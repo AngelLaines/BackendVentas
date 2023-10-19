@@ -19,8 +19,8 @@ const getSales = async (file) => {
     console.log(salesArray);
     return JSON.parse(salesArray);
 }
-const getSaleById = (id,file)=>{
-    const sales = getSales(file);
+const getSaleById = async (id,file)=>{
+    const sales = await getSales(file);
     if (sales.length===0) {
         return sales;
     }
@@ -28,7 +28,7 @@ const getSaleById = (id,file)=>{
 }
 
 const createSale = async (sale,file)=>{
-    const sales = getSales(file);
+    const sales = await getSales(file);
 
     if (sales.length===0) {
         sales.push({id:1,...sale});
@@ -46,8 +46,8 @@ const createSale = async (sale,file)=>{
     return sales[sales.length-1].id;
 }
 
-const removeSale=(id,file)=>{
-    let sales = getSales(file);
+const removeSale= async (id,file)=>{
+    let sales = await getSales(file);
     sales = sales.filter(sale=>sale.id!==+id);
     console.log(sales);
     fs.writeFileSync(saleFile(file),JSON.stringify(sales),'utf-8');
