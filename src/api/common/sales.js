@@ -43,6 +43,7 @@ const removeSale=(id,file)=>{
 }
 
 const saleFile = (file)=>{
+    console.log(filePath+`sales${file}.json`);
     return filePath+`sales${file}.json`;
 }
 module.exports.Sales = {
