@@ -1,7 +1,7 @@
 const { ifError } = require('node:assert');
 const fs = require('node:fs');
 
-let filePath = "/../../tmp/";
+let filePath = "../../tmp/";
 
 let salesArray = [];
 let sales = {};
