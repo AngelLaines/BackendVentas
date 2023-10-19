@@ -91,7 +91,7 @@ module.exports.SalesController = {
                         return;
                     }
                     for (const sale of arrays) {
-                        console.log("a");
+                        console.log(sale);
                         const { idProducto, precio, cantidad, fecha } = sale;
                         if (idProducto === undefined || precio === undefined || cantidad === undefined || fecha === undefined ||
                             idProducto === "" || precio === "" || cantidad === "" || fecha === "") {
@@ -111,6 +111,7 @@ module.exports.SalesController = {
             }
         } catch (error) {
             debug(error);
+            console.log(error);
             Response.error(res);
         }
     },

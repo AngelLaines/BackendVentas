@@ -17,7 +17,7 @@ module.exports.CatalogsController = {
         try {
             const id = req.params.id;
             const game = await CatalogsService.getById(id);
-            console.log(game);
+            //console.log(game);
             if (game===undefined) {
                 Response.error(res,{ statusCode:404, message:"Juego no encontrado" });
                 return;
