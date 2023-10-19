@@ -4,12 +4,13 @@ const router = express.Router();
 
 module.exports.SalesAPI = (app) => {
     router
-    .get("/", SalesController.getAll)
-    .get("/:id", SalesController.getById)
-    .post("/", SalesController.create)
+    .get("/:file", SalesController.getAll)
+    .get("/:id/:file", SalesController.getById)
+    .post("/:file", SalesController.create)
+    .post('/many/:file', SalesController.createMany)
     // update
-    .put("/:id",SalesController.update)
+    .put("/:id/:file",SalesController.update)
     // delete 
-    .delete("/:id",SalesController.delete);
+    .delete("/:id/:file",SalesController.delete);
     app.use("/api/sales",router)
 }

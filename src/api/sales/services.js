@@ -1,17 +1,17 @@
 const { Sales }= require("../common/sales");
 
-const getAll = async () => {
-    console.log(Sales.getSales());
-    return Sales.getSales();
+const getAll = async (file) => {
+    console.log(Sales.getSales(file));
+    return Sales.getSales(file);
 }
 
-const getById = async (id) => {
-    console.log(Sales.getSaleById(+id));
-    return Sales.getSaleById(+id);
+const getById = async (id,file) => {
+    console.log(Sales.getSaleById(+id,file));
+    return Sales.getSaleById(+id,file);
 }
 
-const create = async(product)=>{
-    const id = Sales.createSale(product);
+const create = async(product,file)=>{
+    const id = Sales.createSale(product,file);
     return id;
 }
 
@@ -21,9 +21,9 @@ const update = async (id,body)=>{
     return ;
 }
 // delete 
-const remove = async (id)=>{
+const remove = async (id,file)=>{
     
-    return Sales.removeSale(id);
+    return Sales.removeSale(id,file);
 }
 module.exports.SalesService = {
     getAll,

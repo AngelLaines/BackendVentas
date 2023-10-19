@@ -1,16 +1,28 @@
 const debug = require("debug")("app:module-sales-controller")
 const { SalesService } = require('./services');
-const {Response}  =require('../common/response');
+const { Response } = require('../common/response');
 const createError = require("http-errors");
+
+const fileErrorResponse = () => {
+    Response.error(res, { statusCode: 404, message: 'No se ha especificado el archivo en la ruta' });
+}
+
 module.exports.SalesController = {
     getAll: async (req, res) => {
         try {
-            const sales = await SalesService.getAll();
-            if (sales.length===0) {
-                Response.error(res,{statusCode:404,message:'No hay ventas registradas'});
+            const { params: { file } } = req;
+            if (file) {
+                console.log(file);
+                const sales = await SalesService.getAll(file);
+                if (sales.length === 0) {
+                    Response.error(res, { statusCode: 404, message: 'No hay ventas registradas' });
+                    return;
+                }
+                Response.success(res, 200, "OK", sales);
+            } else {
+                fileErrorResponse();
                 return;
             }
-            Response.success(res,200,"OK",sales);
         } catch (error) {
             console.log(error);
             debug(error);
@@ -19,14 +31,19 @@ module.exports.SalesController = {
     },
     getById: async (req, res) => {
         try {
-            const id = req.params.id;
-            const sale = await SalesService.getById(id);
-            
-            if (sale===undefined || sale.length===0)  {
-                Response.error(res,{ statusCode:404, message:"No se pudo encontrar la venta o no hay ventas registradas" });
-                return;
+            const { id, file } = req.params;
+            if (file) {
+                const sale = await SalesService.getById(id, file);
+
+                if (sale === undefined || sale.length === 0) {
+                    Response.error(res, { statusCode: 404, message: "No se pudo encontrar la venta o no hay ventas registradas" });
+                    return;
+                }
+                Response.success(res, 200, "OK", sale);
+            } else {
+                fileErrorResponse();
+                return
             }
-            Response.success(res,200,"OK",sale);
         } catch (error) {
             console.log(error);
             debug(error)
@@ -36,61 +53,96 @@ module.exports.SalesController = {
     create: async (req, res) => {
         try {
             const { body } = req;
-            const { idProducto,precio,cantidad,fecha } = body;
-            if (idProducto===undefined || precio===undefined || cantidad===undefined || fecha===undefined ||
-                idProducto==="" || precio==="" || cantidad==="" || fecha==="") {
-                Response.error(res,{statusCode:400,message:"Los campos requeridos no existen o estan vacios"});
-                return;
+            const { params: { file } } = req;
+            if (file) {
+                const { idProducto, precio, cantidad, fecha } = body;
+                if (idProducto === undefined || precio === undefined || cantidad === undefined || fecha === undefined ||
+                    idProducto === "" || precio === "" || cantidad === "" || fecha === "") {
+                    Response.error(res, { statusCode: 400, message: "Los campos requeridos no existen o estan vacios" });
+                    return;
+                }
+
+                const id = await SalesService.create(body, file);
+                console.log(id);
+                if (id === 400) {
+                    Response.error(res, { statusCode: id, message: "Hubo un error al intentar guardar los archivos: Bad request" });
+                    return;
+                }
+                Response.success(res, 201, "Created", { id, idProducto, precio, cantidad, fecha });
+            } else {
+                fileErrorResponse();
             }
 
-            const id = await SalesService.create(body);
-            console.log(id);
-            if(id===400){
-                Response.error(res,{statusCode:id,message:"Hubo un error al intentar guardar los archivos: Bad request"});
-                return;
-            }
 
-            Response.success(res,201,"Created",{ id,idProducto,precio,cantidad,fecha });    
-            
         } catch (error) {
             debug(error);
             console.log(error);
             Response.error(res);
         }
     },
-    
-    // update 
-    update:async(req,res)=>{
+    createMany: async (req, res) => {
         try {
-            const {params:{id}}=req;
-            const {body} =req;
-            console.log(body);
-            if (await UsersService.getById(id)) {
-                
+            const { params: { file } } = req;
+            if (file) {
+                const { arrays } = req.body;
+                if (Array.isArray(arrays)) {
+                    if (arrays.length===0) {
+                        Response.error(res, { statusCode: 400, message: "No hay ventas que registrar" });
+                        return;
+                    }
+                    for (const sale of arrays) {
+                        console.log("a");
+                        const { idProducto, precio, cantidad, fecha } = sale;
+                        if (idProducto === undefined || precio === undefined || cantidad === undefined || fecha === undefined ||
+                            idProducto === "" || precio === "" || cantidad === "" || fecha === "") {
+                            Response.error(res, { statusCode: 400, message: "Los campos requeridos no existen o estan vacios" });
+                            return;
+                        }
+
+                        await SalesService.create(sale, file);
+                    }
+                    Response.success(res, 201, "Created", arrays);
+                } else {
+                    Response.error(res, { statusCode: 404, message: "La propiedad recibida no es un arreglo" });
+                }
+
             } else {
-                Response.error(res, new createError.NotFound());
+                fileErrorResponse();
             }
+        } catch (error) {
+            debug(error);
+            Response.error(res);
+        }
+    },
+    // update 
+    update: async (req, res) => {
+        try {
+
         } catch (error) {
             debug(error);
             Response.error(res);
         }
     },
     // delete
-    delete:async(req,res)=>{
+    delete: async (req, res) => {
         try {
-            const {params:{id}} = req;
-            let sale = await SalesService.getById(id);
-            console.log(sale);
-            if (sale) {
-                let status = await SalesService.remove(id);
-                Response.success(res,status,"Sale deleted",);
+            const { params: { id, file } } = req;
+            if (file) {
+                let sale = await SalesService.getById(id, file);
+                console.log(sale);
+                if (sale) {
+                    let status = await SalesService.remove(id, file);
+                    Response.success(res, status, "Sale deleted",);
+                } else {
+                    Response.error(res, new createError.NotFound());
+                }
             } else {
-                Response.error(res, new createError.NotFound());
+                fileErrorResponse();
             }
         } catch (error) {
             debug(error);
             console.log(error);
             Response.error(res);
         }
-    } 
+    }
 }
